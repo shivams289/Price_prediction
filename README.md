@@ -23,4 +23,4 @@
   7. sample_submission.csv
   8. app.py
   9. readme.md
-  10. SKILL_TEST.en.md
+ 
