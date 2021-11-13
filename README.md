@@ -10,11 +10,11 @@
 - `app.py` needs modifications to create the api
 
 # File Structure
-- Temp_repo
-  1. data
+- Temp_repo/
+  1. data/
       - mercari_train.csv
       - mercari_tes.csv
-  2. model
+  2. model/
       - model.pkl
   3. model.py
   4. build_model.py
