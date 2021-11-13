@@ -9,9 +9,9 @@ dependencies:
   - scipy
   - nltk
   - flask
-  - re
-  - pickle
+  - pickleshare
+  - regex
 
-#  - pip:
-#      - pip package 1
-#      - pip package 2
+  #- pip:
+    #- regex
+   
