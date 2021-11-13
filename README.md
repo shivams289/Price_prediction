@@ -10,8 +10,8 @@
 - `app.py` needs modeification to create the api
 
 #File Structure
--Temp_repo
-  1.data
-    -mercari_train.csv
-    -mercari_tes.csv
-  2.model.py
+- Temp_repo
+  1. data
+    - mercari_train.csv
+    - mercari_tes.csv
+  2. model.py
