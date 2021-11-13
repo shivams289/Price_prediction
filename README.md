@@ -14,4 +14,13 @@
   1. data
     - mercari_train.csv
     - mercari_tes.csv
-  2. model.py
+  2. model
+    - model.pkl
+  3. model.py
+  4. build_model.py
+  5. submission.csv
+  6. environment.yml
+  7. sample_submission.csv
+  8. app.py
+  9. readme.md
+  10. SKILL_TEST.en.md
