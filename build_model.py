@@ -42,26 +42,34 @@ def build_model():
 
 	print('\nPreprocessing complete\n')
 	
-	#X_train, X_test, y_train, y_test = train_test_split(X, y)
+	
 	print('TrainShape_X:', X[:len(df_train)].shape)
 	print('TrainShape_y:', y.shape)
 
-	print('TestShape:', X[len(df_train):].shape)
+	print('TestShape:', X[len(df_train):].shape, '\n')
 
-	print('Training Model')
+	print('Training model for validation purpose and calculating validation metric(RMSLE)')
+	X_train, X_test, y_train, y_test = train_test_split(X[:len(df_train)], y, test_size = 0.25, random_state = 44)
+	model.fit(X_train, y_train)
+	preds_test = model.predict(X_test)
+	print('RMSLE:',model.RMSLE(y_test, preds_test))
+	print('RMSLE<0.5:',( model.RMSLE(y_test, preds_test) <0.5), '\n')
+
+	print('Training Model for testing purpose on full train_data')
 	model.fit(X[:len(df_train)], y)
 
 	preds = model.predict(X[len(df_train):])
 	preds = pd.DataFrame(preds, columns = ['price'])
 	submission = pd.concat([df_test, preds], axis = 1 )
 	submission = submission[['id', 'price']]
+	print('SubmissionFile_Shape:',submission.shape)
 	print('Saving submission.csv file')
 	submission.to_csv('submission.csv')
 	print('Saving trained model to model/model.pkl')
 	with open('model/model.pkl', 'wb') as f:
 		pickle.dump(model, f)
 	
-	#print('RMSLE:',model.RMSLE(y_test, preds))
+	
 
 if __name__ == "__main__":
 	build_model()
