@@ -9,4 +9,9 @@
 - run `build_model.py` to run the model and check if it runs sucessfully,  it will save it in model.pkl file and create submission.csv
 - `app.py` needs modeification to create the api
 
-##File Structure
+#File Structure
+-Temp_repo
+  1.data
+    -mercari_train.csv
+    -mercari_tes.csv
+  2.model.py
