@@ -2,6 +2,7 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.preprocessing import LabelBinarizer
 import nltk
 import re
+import pickle
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 from sklearn.linear_model import Ridge
@@ -86,20 +87,31 @@ class Model:
 		return df
 
 
-	def CountVectorizer(self, df):
-		X_name = self.Cvectorizer.fit_transform(df["name"]) 
+	def CountVectorizer_fit(self, df):
+		self.Cvectorizer.fit(df["name"]) 
+		
+	def CountVectorizer_transform(self, df):
+		X_name = self.Cvectorizer.transform(df['name'])
 		return X_name
 
-	def TFIDFVectorizer(self, df):
-		X_descp = self.Tvectorizer.fit_transform(df["item_description"])
+	def TFIDFVectorizer_fit(self, df):
+		self.Tvectorizer.fit(df['item_description'])
+
+	def TFIDFVectorizer_transform(self, df):
+		X_descp = self.Tvectorizer.transform(df["item_description"])
 		return X_descp
 
-	def Labelbinarizer(self, df):
-		X_brand = self.Lbinarizer.fit_transform(df["brand_name"])
+	def Labelbinarizer_fit(self, df):
+		self.Lbinarizer.fit(df['brand_name'])
+
+	def Labelbinarizer_transform(self, df):
+		X_brand = self.Lbinarizer.transform(df["brand_name"])
 		return X_brand
 
-	def Dummyencoder(self, df, X_name, X_desc, X_brand):
-		X_dummies = scipy.sparse.csr_matrix(pd.get_dummies(df[['item_condition_id','gender','shipping','item', 'type_item']], sparse = True).values)
+	def Dummyencoder(self, df, X_name, X_desc, X_brand, dum):
+		more_left = pd.concat([pd.get_dummies(df[['item_condition_id','gender','shipping','item', 'type_item']]), pd.DataFrame(columns = (set(dum) - set(pd.get_dummies(df[['item_condition_id','gender','shipping','item', 'type_item']]).columns)) )], axis =1).fillna(0)
+		#print(more_left)
+		X_dummies = scipy.sparse.csr_matrix(more_left.values)
 
 		X_left = scipy.sparse.csr_matrix(df[['id_char_length', 'id_word_length', 'name_length', 'log_id_char_length', 'log_id_word_length']])
 
@@ -107,6 +119,21 @@ class Model:
 
 		print({'X_dummies_shape':X_dummies.shape, 'X_name_shape':X_name.shape, 'X_desc_shape':X_desc.shape, 'X_brand_shape':X_brand.shape, 'X_left_shape':X_left.shape})
 		return X
+
+	def pickle_CountVectorizer(self, path = 'pklmodel/Cvect.pkl'):
+		with open(path, 'wb') as f:
+			pickle.dump(self.Cvectorizer, f)
+			print('PickledCVectorizer at {}'.format(path))
+
+	def pickle_TFIDFVectorizer(self, path = 'pklmodel/TFIDF.pkl'):
+		with open(path, 'wb') as f:
+			pickle.dump(self.Tvectorizer, f)
+			print('PickledTFIDF at {}'.format(path))
+
+	def pickle_Lbinarizer(self, path = 'pklmodel/Lbinarizer.pkl'):
+		with open(path, 'wb') as f:
+			pickle.dump(self.Lbinarizer, f)
+			print('Lbinarizer at {}'.format(path))
 
 	def fit(self, X_train, y):
 		self.model.fit(X_train, np.log1p(y))
